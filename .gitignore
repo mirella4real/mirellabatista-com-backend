@@ -42,4 +42,4 @@ credentials
 logs/
 
 # Lambda build artifacts
-terraform/lambda_function.zip
+lambda/lambda_function.zip

@@ -17,7 +17,7 @@ resource "aws_dynamodb_table" "visitor_counter" {
 
 # IAM Role for Lambda
 resource "aws_iam_role" "lambda_role" {
-  name = "${var.lambda_function_name}-role"
+  name = var.lambda_role_name
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -91,10 +91,11 @@ resource "aws_apigatewayv2_api" "visitor_counter" {
 
 # API Gateway Integration
 resource "aws_apigatewayv2_integration" "visitor_counter" {
-  api_id             = aws_apigatewayv2_api.visitor_counter.id
-  integration_type   = "AWS_PROXY"
-  integration_uri    = aws_lambda_function.visitor_counter.invoke_arn
-  integration_method = "POST"
+  api_id                 = aws_apigatewayv2_api.visitor_counter.id
+  integration_type       = "AWS_PROXY"
+  integration_uri        = aws_lambda_function.visitor_counter.invoke_arn
+  integration_method     = "POST"
+  payload_format_version = "2.0"
 }
 
 # API Gateway Route

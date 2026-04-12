@@ -21,3 +21,9 @@ variable "lambda_function_name" {
   type        = string
   default     = "visitor-counter"
 }
+
+variable "lambda_role_name" {
+  description = "Name of the IAM role for Lambda"
+  type        = string
+  default     = "visitor-counter-lambda-role"
+}
