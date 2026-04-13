@@ -1,6 +1,6 @@
+# visitor counter lambda function
 import json
 import os
-
 import boto3
 
 dynamodb = boto3.resource("dynamodb")
