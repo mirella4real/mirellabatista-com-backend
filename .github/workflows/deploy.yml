@@ -1,0 +1,55 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'lambda/**'
+      - 'terraform/**'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install dependencies
+        run: uv sync
+        working-directory: .
+
+      - name: Run tests
+        run: uv run pytest
+        working-directory: .
+
+      - name: Build Lambda ZIP
+        run: |
+          cd lambda
+          zip lambda_function.zip lambda_function.py
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::127214179898:role/github-actions-backend
+          aws-region: us-east-1
+
+      - name: Terraform init
+        run: terraform init
+        working-directory: terraform
+
+      - name: Terraform apply
+        run: terraform apply -auto-approve
+        working-directory: terraform
