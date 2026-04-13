@@ -1,3 +1,15 @@
+[project]
+name = "mirellabatista-com-backend"
+version = "0.1.0"
+requires-python = ">=3.11"
+
+[dependency-groups]
+dev = [
+    "pytest>=7.0",
+    "moto[dynamodb]>=5.0",
+    "boto3>=1.26",
+]
+
 [tool.ruff]
 line-length = 88
 target-version = "py311"
